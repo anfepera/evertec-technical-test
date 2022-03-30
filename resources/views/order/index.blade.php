@@ -14,14 +14,16 @@
             </tr>
         </thead>
         <tbody>
+        @foreach ($orders as $order)
         <tr>
-            <td>Andres Felipe</td>
-            <td>andres.felipe.penna@gmail.com</td>
-            <td>3118452133</td>
-            <td>CREATED</td>
-            <td>Computer</td>
-            <td>4000000</td>
+            <td> {{  $order->customer_name }}</td>
+            <td> {{  $order->customer_email }}</td>
+            <td> {{  $order->customer_mobile }}</td>
+            <td> {{  $order->status }}</td>
+            <td></td>
+            <td></td>
         </tr>
+        @endforeach
         </tbody>
     </table>
 @endsection
