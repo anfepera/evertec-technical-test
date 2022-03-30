@@ -21,6 +21,14 @@ return new class extends Migration
             $table->enum("status",["CREATED","PAYED","REJECTED"]);
             $table->timestamps();
         });
+        $order_demo = new \App\Models\Order([
+            "customer_name"=> "Andres Felipe Penna Ramirez",
+            "customer_email" => "andres.felipe.penna@gmail.com",
+            "customer_mobile" =>"3118452133",
+            "status"=>"CREATED"
+            ]
+        );
+        $order_demo->save();
     }
 
     /**
