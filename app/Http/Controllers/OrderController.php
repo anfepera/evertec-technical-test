@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     public function  index() {
-        $message = "message from order controller";
-        return view('order.index', [ "message" => $message]);
-
+        $orders = DB::table('orders')->get();
+        return view('order.index', [ "orders" => $orders]);
     }
 }
