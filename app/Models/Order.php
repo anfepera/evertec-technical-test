@@ -14,7 +14,10 @@ class Order extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        "product_name",
-        "price"
+        "product_id",
+        "customer_name",
+        "customer_email",
+        "customer_mobile",
+        "status"
     ];
 }
