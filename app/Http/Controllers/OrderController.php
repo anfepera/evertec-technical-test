@@ -58,6 +58,14 @@ class OrderController extends Controller
 
     public function detail($reference) {
         $order = DB::table('orders')->where('reference', $reference)->first();
+        $placeToPayAPI = new PlaceToPayApi();
+        $statusTransaction = $placeToPayAPI->getTransactionStatus($order->transaction_id);
+        if ($statusTransaction != "") {
+            DB::table('orders')
+                ->where('id', $order->id)
+                ->update(['status' => $statusTransaction]);
+
+        }
         return $order;
     }
 

@@ -6,6 +6,16 @@ use Illuminate\Support\Facades\Request;
 
 class PlaceToPayApi
 {
+    public  function __construct()
+    {
+        $this->placetopay = new PlacetoPay([
+            'login' => config('services.placetopay.login'),
+            'tranKey' => config('services.placetopay.tranKey'),
+            'baseUrl' => config('services.placetopay.url'),
+            'timeout' => 10, // (optional) 15 by default
+        ]);
+    }
+
     /**
      * @param $data
      * @return array
@@ -16,12 +26,7 @@ class PlaceToPayApi
          * https://github.com/dnetix/redirection
          */
         $data_response = [];
-        $placetopay = new PlacetoPay([
-            'login' => config('services.placetopay.login'),
-            'tranKey' => config('services.placetopay.tranKey'),
-            'baseUrl' => config('services.placetopay.url'),
-            'timeout' => 10, // (optional) 15 by default
-        ]);
+
         $request = [
             'buyer' => [
                 'name' => $data['customer_name'],
@@ -41,7 +46,7 @@ class PlaceToPayApi
             'ipAddress' => Request::ip(),
             'userAgent' => Request::userAgent()
         ];
-        $response = $placetopay->request($request);
+        $response = $this->placetopay->request($request);
         if ($response->isSuccessful()) {
             $data_response['error'] = false;
             $data_response['payment_url'] = $response->processUrl();
@@ -56,4 +61,26 @@ class PlaceToPayApi
 
     }
 
+
+    public function getTransactionStatus($transaction_id) {
+        $response = $this->placetopay->query($transaction_id);
+        $status = "";
+        if ($response->isSuccessful()) {
+            // In order to use the functions please refer to the Dnetix\Redirection\Message\RedirectInformation class
+
+            if ($response->status()->isApproved()) {
+                $status = "PAYED";
+                // The payment has been approved
+            } else {
+                $status = "REJECTED";
+
+            }
+        } else {
+            $status = $response->status()->message();
+            // There was some error with the connection so check the message
+            print_r($response->status()->message() . "\n");
+        }
+        return $status;
+
+    }
 }
