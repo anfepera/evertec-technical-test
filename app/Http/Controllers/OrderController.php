@@ -26,7 +26,18 @@ class OrderController extends Controller
             ]
         );
         $order->save();
-        return $this->index();
+        return view('order.detail', [
+            "id" =>$order->id,
+            "customer_name" => $order->customer_name,
+            "customer_email" => $order->customer_email,
+            "customer_mobile" => $order->customer_mobile,
+            "status" => $order->status
+        ]);
     }
+
+    public function pay(Request $request) {
+        return "pay";
+    }
+
 
 }
