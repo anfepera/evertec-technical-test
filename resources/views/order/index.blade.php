@@ -1,5 +1,7 @@
 @extends('layout.layout')
 @section('content')
+    <a href="{{ route('order.new')}}" class="btn btn-warning">Create Order</a>
+
     <h1> Order List</h1>
     <table class="table">
         <thead class="table-dark">
