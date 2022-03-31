@@ -4,6 +4,8 @@
         @csrf
         <div class="container">
             <h1> Resume Order</h1>
+            <input type="hidden" id="order_id" name="order_id" value="{{ $id }}">
+            <input type="hidden" id="product_price" name="product_price" value="{{ $product_price }}">
             <div class="row">
                 <div class="col">
                     <label>Id:</label>
