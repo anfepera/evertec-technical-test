@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\API\PlaceToPayApi;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -55,7 +56,10 @@ class OrderController extends Controller
     }
 
     public function pay(Request $request) {
-        return "pay";
+        $data = $request->all();
+        $placeToPayAPI = new PlaceToPayApi();
+        $placeToPayAPI->create_payment_request($data["order_id"], $data["product_price"]);
+        return $request->all();
     }
 
 
