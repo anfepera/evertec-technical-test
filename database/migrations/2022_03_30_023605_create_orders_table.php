@@ -15,20 +15,14 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')->references('id')->on('products');
             $table->string("customer_name", 80);
             $table->string("customer_email", 120);
             $table->string("customer_mobile", 40);
-            $table->enum("status",["CREATED","PAYED","REJECTED"]);
+            $table->enum("status",["CREATED", "PAYED", "REJECTED"]);
             $table->timestamps();
         });
-        $order_demo = new \App\Models\Order([
-            "customer_name"=> "Andres Felipe Penna Ramirez",
-            "customer_email" => "andres.felipe.penna@gmail.com",
-            "customer_mobile" =>"3118452133",
-            "status"=>"CREATED"
-            ]
-        );
-        $order_demo->save();
     }
 
     /**
