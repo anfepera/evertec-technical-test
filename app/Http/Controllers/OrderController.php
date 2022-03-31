@@ -11,6 +11,13 @@ class OrderController extends Controller
 {
     public function index() {
         $orders = DB::table('orders')->get();
+        if (count($orders) > 0) {
+            $product = DB::table('products')->where('id', ($orders[0])->product_id)->first();
+        }
+        foreach ($orders as $order) {
+            $order->product_name = $product->product_name;
+            $order->price = number_format($product->price, 2);
+        }
         return view('order.index', [ "orders" => $orders]);
     }
 
