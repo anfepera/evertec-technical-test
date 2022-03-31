@@ -11,7 +11,6 @@
                            name="customer_name"
                            type="text"
                            class="@error('customer_name') is-invalid @enderror">
-
                 </div>
             </div>
             <div class="row justify-content-md-center">
@@ -21,7 +20,6 @@
                            name="email"
                            type="email"
                            class="@error('email') is-invalid @else is-valid @enderror">
-
                 </div>
             </div>
             <div class="row justify-content-md-center">
@@ -35,7 +33,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <button type="submit" class="btn btn-success"  value="Submit">Pay</button>
+                    <button type="submit" class="btn btn-success"  value="Submit">Save</button>
                 </div>
             </div>
         </div>

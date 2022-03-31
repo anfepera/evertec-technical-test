@@ -19,4 +19,6 @@ Route::get('/', function () {
 
 Route::get('/orders', [\App\Http\Controllers\OrderController::class, "index"])->name('orders.index');
 Route::get('/order/new', [\App\Http\Controllers\OrderController::class, "new"])->name('order.new');;
-Route::post('/order/create', [\App\Http\Controllers\OrderController::class, "create"])->name('order.create');;
+Route::post('/order/create', [\App\Http\Controllers\OrderController::class, "create"])->name('order.create');
+Route::post('/order/detail', [\App\Http\Controllers\OrderController::class, "detail"])->name('order.detail');
+Route::post('/order/pay', [\App\Http\Controllers\OrderController::class, "pay"])->name('order.pay');
