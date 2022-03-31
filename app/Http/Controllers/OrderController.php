@@ -16,14 +16,14 @@ class OrderController extends Controller
     public function new() {
         return view('order.new');
     }
-    public function pay(Request $request) {
+    public function create(Request $request) {
         $data = $request->all();
-        ;
         $order = new Order([
             "customer_name" => $data['customer_name'],
             "customer_email" => $data['email'],
             "customer_mobile" => $data['phone_number'],
-            "status" => "CREATED"]
+            "status" => "CREATED"
+            ]
         );
         $order->save();
         return $this->index();

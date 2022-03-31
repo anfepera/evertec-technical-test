@@ -1,7 +1,7 @@
 @extends('layout.layout')
 @section('content')
     <h1> Create Order</h1>
-    <form method="POST" action="{{ route('order.pay') }}">
+    <form method="POST" action="{{ route('order.create') }}">
         @csrf
         <div class="container">
             <div class="row justify-content-md-center">
