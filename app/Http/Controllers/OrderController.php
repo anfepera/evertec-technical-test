@@ -80,7 +80,8 @@ class OrderController extends Controller
                 ]
             );
             $order->save();
-            return $order;
+            return redirect()->away($response['payment_url']);
+
 
         } else {
             return $response;
