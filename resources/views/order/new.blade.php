@@ -1,7 +1,7 @@
 @extends('layout.layout')
 @section('content')
     <h1> Create Order</h1>
-    <form method="POST" action="{{ route('order.create') }}">
+    <form method="POST" action="{{ route('order.pay') }}">
         @csrf
         <div class="container">
             <input type="hidden" id="product_id" name="product_id" value="{{ $product_id }}">
@@ -48,7 +48,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <button type="submit" class="btn btn-success"  value="Submit">Save</button>
+                    <button type="submit" class="btn btn-success"  value="Submit">Pay</button>
                 </div>
             </div>
         </div>
