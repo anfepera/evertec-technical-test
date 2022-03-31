@@ -6,14 +6,6 @@ use Illuminate\Support\Facades\Request;
 
 class PlaceToPayApi
 {
-    public function  __construct() {
-        /**
-         * Create instance of placeToPay service
-         * [https://github.com/dnetix/redirection]
-         */
-
-    }
-
     /**
      * @param $data
      * @return array
@@ -21,12 +13,13 @@ class PlaceToPayApi
     public function  createPaymentRequest($data){
         /**
          * Provide information for make to pay and return url of payment
+         * https://github.com/dnetix/redirection
          */
         $data_response = [];
         $placetopay = new PlacetoPay([
-            'login' => '6dd490faf9cb87a9862245da41170ff2', // Provided by PlacetoPay
-            'tranKey' => '024h1IlD', // Provided by PlacetoPay
-            'baseUrl' => 'https://dev.placetopay.com/redirection/',
+            'login' => config('services.placetopay.login'),
+            'tranKey' => config('services.placetopay.tranKey'),
+            'baseUrl' => config('services.placetopay.url'),
             'timeout' => 10, // (optional) 15 by default
         ]);
         $request = [
