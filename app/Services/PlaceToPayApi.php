@@ -16,7 +16,7 @@ class PlaceToPayApi
 
     /**
      * @param $data
-     * @return void
+     * @return array
      */
     public function  createPaymentRequest($data){
         /**
@@ -37,7 +37,7 @@ class PlaceToPayApi
             ],
             'payment' => [
                 'reference' => $data['reference'],
-                'description' => 'Testing payment',
+                'description' => 'order payment test',
                 'amount' => [
                     'currency' => 'COP',
                     'total' => $data['product_price'],
@@ -50,14 +50,14 @@ class PlaceToPayApi
         ];
         $response = $placetopay->request($request);
         if ($response->isSuccessful()) {
-            // STORE THE $response->requestId() and $response->processUrl() on your DB associated with the payment order
-            // Redirect the client to the processUrl or display it on the JS extension
-            $data_response['url'] = $response->processUrl();
-            $data_response['id_transaction'] = $response->requestId();
+            $data_response['error'] = false;
+            $data_response['payment_url'] = $response->processUrl();
+            $data_response['transaction_id'] = $response->requestId();
 
         } else {
             // There was some error so check the message and log it
-            $response->status()->message();
+            $data_response['error'] = true;
+            $data_response['message'] = $response->status()->message();
         }
         return $data_response;
 
