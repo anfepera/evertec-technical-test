@@ -30,20 +30,20 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <label for="email">Email:</label>
-                    <input id="email"
-                           name="email"
+                    <label for="customer_email">Email:</label>
+                    <input id="customer_email"
+                           name="customer_email"
                            type="email"
-                           class="@error('email') is-invalid @else is-valid @enderror">
+                           class="@error('customer_email') is-invalid @else is-valid @enderror">
                 </div>
             </div>
             <div class="row justify-content-md-center">
                 <div class="col">
-                    <label for="phone_number">Phone number:</label>
-                    <input id="phone_number"
-                           name="phone_number"
+                    <label for="customer_mobile">Mobile:</label>
+                    <input id="customer_mobile"
+                           name="customer_mobile"
                            type="number"
-                           class="@error('phone_number') is-invalid @enderror">
+                           class="@error('customer_mobile') is-invalid @enderror">
                 </div>
             </div>
             <div class="row">
@@ -58,10 +58,10 @@
     @error('customer_name')
     <div class="alert alert-danger"> Customer name is required</div>
     @enderror
-    @error('email')
+    @error('customer_email')
     <div class="alert alert-danger"> Email is required</div>
     @enderror
-    @error('phone_number')
-    <div class="alert alert-danger"> Phone number is required</div>
+    @error('customer_mobile')
+    <div class="alert alert-danger"> Mobile is required</div>
     @enderror
 @endsection
