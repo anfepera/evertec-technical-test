@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\API\PlaceToPayApi;
 use App\Models\Order;
-use Illuminate\Support\Facades\DB;
+use App\Services\PlaceToPayApi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -26,6 +26,7 @@ class OrderController extends Controller
             $product->save();
         }
         $product_to_shop = [
+
             "product_id" => $product->id,
             "product_name" => $product->product_name,
             "product_price"=> $product->price
@@ -55,11 +56,40 @@ class OrderController extends Controller
         ]);
     }
 
+    public function detail($reference) {
+        $order = DB::table('orders')->where('reference', $reference)->first();
+        return $order;
+    }
+
     public function pay(Request $request) {
-        $data = $request->all();
+        $referenceOrder  = uniqid("ref-");
         $placeToPayAPI = new PlaceToPayApi();
-        $placeToPayAPI->create_payment_request($data["order_id"], $data["product_price"]);
-        return $request->all();
+        $data = $request->all();
+        $data['reference'] = $referenceOrder;
+        $response = $placeToPayAPI->createPaymentRequest($data);
+        if (isset($response['transaction_id'])) {
+            $order = new Order([
+                    "reference" => $referenceOrder,
+                    "product_id" => $data['product_id'],
+                    "customer_name" => $data['customer_name'],
+                    "customer_email" => $data['customer_email'],
+                    "customer_mobile" => $data['customer_mobile'],
+                    "status" => "CREATED",
+                    "transaction_id" => $response['transaction_id'],
+                    "payment_url" =>  $response['payment_url']
+                ]
+            );
+            $order->save();
+            return $order;
+
+        } else {
+            return $response;
+        }
+        return $response;
+
+
+
+        return "ok";
     }
 
 
