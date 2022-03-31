@@ -44,6 +44,9 @@ class OrderController extends Controller
         $order->save();
         return view('order.detail', [
             "id" =>$order->id,
+            "product_id" => $order->product_id,
+            "product_name" => $data["product_name"],
+            "product_price"=> $data["product_price"],
             "customer_name" => $order->customer_name,
             "customer_email" => $order->customer_email,
             "customer_mobile" => $order->customer_mobile,

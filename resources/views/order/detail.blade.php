@@ -12,6 +12,18 @@
             </div>
             <div class="row">
                 <div class="col">
+                    <label>Product name:</label>
+                    <spam >{{ $product_name }}</spam>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label>Product price:</label>
+                    <spam >{{ $product_price }}</spam>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <label>Customer name:</label>
                     <spam >{{ $customer_name }}</spam>
                 </div>
