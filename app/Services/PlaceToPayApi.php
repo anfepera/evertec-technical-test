@@ -42,7 +42,7 @@ class PlaceToPayApi
                 ],
             ],
             'expiration' => date('c', strtotime('+2 days')),
-            'returnUrl' => 'http://evertec-technical-test.loc:8000/order/detail/' . $data['reference'],
+            'returnUrl' => route('order.detail', [$data['reference']]),
             'ipAddress' => Request::ip(),
             'userAgent' => Request::userAgent()
         ];
