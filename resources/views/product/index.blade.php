@@ -16,7 +16,7 @@
             <td> {{  $product->product_name }}</td>
             <td> {{  $product->price }}</td>
             <td>
-                <a href="{{ route('order.new', [ $product->id ])}}" class="btn btn-info">Buy</a>
+                <a href="{{ route('order.new', [ $product->id ])}}" class="btn btn-success">Buy</a>
             </td>
         </tr>
         @endforeach
