@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string("customer_name", 80);
             $table->string("customer_email", 120);
             $table->string("customer_mobile", 40);
-            $table->enum("status",["CREATED", "PAYED", "REJECTED"]);
+            $table->enum("status",["CREATED", "PAYED", "REJECTED", "PENDING"]);
             $table->string("transaction_id", 10);
             $table->string("payment_url", 120);
             $table->timestamps();
