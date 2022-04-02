@@ -1,6 +1,6 @@
 @extends('layout.layout')
 @section('content')
-    <a href="{{ route('order.new')}}" class="btn btn-warning">Create Order</a>
+    <a href="{{ route('products.index')}}" class="btn btn-info">View products list</a>
 
     <h1> Order List</h1>
     <table class="table">
@@ -27,8 +27,6 @@
             <td> {{  $order->status }}</td>
             <td>
                 <a href="{{ route('order.detail', [ $order->reference ])}}" class="btn btn-info">View order</a>
-
-
             </td>
         </tr>
         @endforeach
