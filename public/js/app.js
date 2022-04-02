@@ -2206,9 +2206,19 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /***/ (() => {
 
 $(document).ready(function () {
-  $('#type_filter').change(function () {
-    alert($(this).val());
+  /*
+  $("#email_row").hide();
+  $("#product_row").show();
+  $('#type_filter').change(function() {
+      if ($(this).val() == "product_id") {
+          $("#email_row").hide();
+          $("#product_row").show();
+       } else {
+          $("#email_row").show();
+          $("#product_row").hide();
+      }
   });
+  */
 });
 
 /***/ }),
