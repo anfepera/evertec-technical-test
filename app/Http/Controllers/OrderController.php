@@ -88,6 +88,25 @@ class OrderController extends Controller
 
     public function retry(Order $order)
     {
+        $orderUpdated = Order::find($order->id);
+        $referenceOrderNew = uniqid("ref-");
+        $placeToPayAPI = new PlaceToPayApi();
+        $data=[
+            "customer_name" => $order->customer_name,
+            "customer_email" => $order->customer_email,
+            "customer_mobile" => $order->customer_mobile,
+            "reference" => $referenceOrderNew,
+            "product_price" => $order->product->price
+        ];
+        $response = $placeToPayAPI->createPaymentRequest($data);
+        if (isset($response['transaction_id'])) {
+            $orderUpdated->reference = $referenceOrderNew;
+            $orderUpdated->transaction_id = $response['transaction_id'];
+            $orderUpdated->payment_url = $response['payment_url'];
+            $orderUpdated->save();
+            return redirect()->away($orderUpdated->payment_url);
+        }
+
         return $order;
 
     }
