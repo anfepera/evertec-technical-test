@@ -4,19 +4,19 @@
     <form method="POST" action="{{ route('order.pay') }}">
         @csrf
         <div class="container">
-            <input type="hidden" id="product_id" name="product_id" value="{{ $product_id }}">
-            <input type="hidden" id="product_name" name="product_name" value="{{ $product_name }}">
-            <input type="hidden" id="product_price" name="product_price" value="{{ $product_price }}">
+            <input type="hidden" id="product_id" name="product_id" value="{{ $product->id }}">
+            <input type="hidden" id="product_name" name="product_name" value="{{ $product->product_name }}">
+            <input type="hidden" id="product_price" name="product_price" value="{{ $product->price }}">
             <div class="row">
                 <div class="col">
                     <label>Product Name:</label>
-                    <spam >{{ $product_name }}</spam>
+                    <spam >{{ $product->product_name }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label>Price:</label>
-                    <spam >{{ $product_price }}</spam>
+                    <spam >{{ $product->price }}</spam>
                 </div>
             </div>
             <div class="row">
