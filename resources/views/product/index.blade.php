@@ -4,8 +4,8 @@
         <div class="card-body">
             <h5 class="card-title">Orders Filters</h5>
             <p class="card-text">Get order list by customer email or product.</p>
-
                 <form method="POST" action="{{ route('order.filter') }}">
+                    @csrf
                     <div class="container">
                         <div class="row">
                             <div class="col">
@@ -14,15 +14,19 @@
                             <div class="col">
                                 <input id="filter_email"
                                        name="filter_email"
-                                       type="email"
+                                       type="text"
+                                       required
                                        placeholder="Please, input the email">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button type="submit" style="margin-top: 6px" class="btn btn-success"  value="Submit">Get orders</button>
                             </div>
                         </div>
 
                     </div>
                 </form>
-
-            <a href="#" class="btn btn-primary">Get orders</a>
         </div>
     </div>
     <h1> Product List</h1>
@@ -47,4 +51,9 @@
         @endforeach
         </tbody>
     </table>
+    <div class="row">
+        <div class="col">
+            <a href="{{ route('orders.index')}}" class="btn btn-info">View orders list</a>
+        </div>
+    </div>
 @endsection

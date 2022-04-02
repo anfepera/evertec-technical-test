@@ -24,4 +24,4 @@ Route::get('/order/detail/{reference}', [\App\Http\Controllers\OrderController::
 Route::post('/order/pay', [\App\Http\Controllers\OrderController::class, "pay"])->name('order.pay');
 Route::get('/order/retry/{order}', [\App\Http\Controllers\OrderController::class, "retry"])->name('order.retry');
 
-Route::get('/order/filterOrderBy/{field}/{filter}', [\App\Http\Controllers\OrderController::class, "filterOrderBy"])->name('order.filter');
+Route::post('/order/filterOrderBy', [\App\Http\Controllers\OrderController::class, "filterOrderBy"])->name('order.filter');

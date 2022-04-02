@@ -111,12 +111,11 @@ class OrderController extends Controller
 
     }
 
-    public function filterOrderBy(String $field, String $filter)
+    public function filterOrderBy(Request $request)
     {
-        $orders = Order::where($field, $filter)->orderBy('updated_at')->get();
+        $data = $request->all();
+        $orders = Order::where("customer_email", "LIKE", "%".$data['filter_email']."%")->orderBy('updated_at')->get();
         return view('order.index', [ "orders" => $orders]);
-
     }
-
 
 }
