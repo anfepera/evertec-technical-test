@@ -22,3 +22,4 @@ Route::get('/order/new/{product}', [\App\Http\Controllers\OrderController::class
 Route::post('/order/create', [\App\Http\Controllers\OrderController::class, "create"])->name('order.create');
 Route::get('/order/detail/{reference}', [\App\Http\Controllers\OrderController::class, "detail"])->name('order.detail');
 Route::post('/order/pay', [\App\Http\Controllers\OrderController::class, "pay"])->name('order.pay');
+Route::get('/order/retry/{order}', [\App\Http\Controllers\OrderController::class, "retry"])->name('order.retry');

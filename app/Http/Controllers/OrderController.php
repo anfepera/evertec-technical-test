@@ -29,20 +29,12 @@ class OrderController extends Controller
             ]
         );
         $order->save();
-        return view('order.detail', [
-            "id" =>$order->id,
-            "product_id" => $order->product_id,
-            "product_name" => $data["product_name"],
-            "product_price"=> $data["product_price"],
-            "customer_name" => $order->customer_name,
-            "customer_email" => $order->customer_email,
-            "customer_mobile" => $order->customer_mobile,
-            "status" => $order->status
-        ]);
+        return view('order.detail', ["order"=>$order]);
     }
 
-    public function detail($reference) {
-        $order = DB::table('orders')->where('reference', $reference)->first();
+    public function detail(String $reference)
+    {
+        $order = Order::query()->firstWhere('reference', $reference);
         $placeToPayAPI = new PlaceToPayApi();
         $responseStatusTransaction = $placeToPayAPI->getTransactionStatus($order->transaction_id);
         $statusTransaction = $responseStatusTransaction->status()->status();
@@ -54,21 +46,11 @@ class OrderController extends Controller
 
         } elseif ($statusTransaction == "REJECTED") {
             $newStatus = "REJECTED";
-
         }
-        DB::table('orders')
-            ->where('id', $order->id)
-            ->update(['status' => $newStatus]);
+        $order->status = $newStatus;
+        $order->save();
         return view('order.detail', [
-            "id" =>$order->id,
-            "product_id" => $order->product_id,
-            "product_name" => "-",
-            "product_price"=> "-",
-            "customer_name" => $order->customer_name,
-            "customer_email" => $order->customer_email,
-            "customer_mobile" => $order->customer_mobile,
-            "status" => $newStatus,
-            "reference" => $order->reference
+            "order" => $order
         ]);
     }
 
@@ -102,6 +84,12 @@ class OrderController extends Controller
 
 
         return "ok";
+    }
+
+    public function retry(Order $order)
+    {
+        return $order;
+
     }
 
 
