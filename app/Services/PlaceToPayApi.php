@@ -12,7 +12,7 @@ class PlaceToPayApi
             'login' => config('services.placetopay.login'),
             'tranKey' => config('services.placetopay.tranKey'),
             'baseUrl' => config('services.placetopay.url'),
-            'timeout' => 10, // (optional) 15 by default
+            'timeout' => 10,
         ]);
     }
 
@@ -20,7 +20,8 @@ class PlaceToPayApi
      * @param $data
      * @return array
      */
-    public function  createPaymentRequest($data){
+    public function  createPaymentRequest(array $data):array
+    {
         /**
          * Provide information for make to pay and return url of payment
          * https://github.com/dnetix/redirection
@@ -42,7 +43,7 @@ class PlaceToPayApi
                 ],
             ],
             'expiration' => date('c', strtotime('+2 days')),
-            'returnUrl' => route('order.detail', [$data['reference']]),
+            'returnUrl' => route('order.detail', $data['reference']),
             'ipAddress' => Request::ip(),
             'userAgent' => Request::userAgent()
         ];
@@ -62,9 +63,9 @@ class PlaceToPayApi
     }
 
 
-    public function getTransactionStatus($transaction_id) {
-        $response = $this->placetopay->query($transaction_id);
-        $status = "";
+    public function getTransactionStatus(String $transactionId) {
+        $response = $this->placetopay->query($transactionId);
+
         if ($response->isSuccessful()) {
             // In order to use the functions please refer to the Dnetix\Redirection\Message\RedirectInformation class
 
@@ -75,12 +76,8 @@ class PlaceToPayApi
                 $status = "REJECTED";
 
             }
-        } else {
-            $status = $response->status()->message();
-            // There was some error with the connection so check the message
-            print_r($response->status()->message() . "\n");
         }
-        return $status;
+        return $response;
 
     }
 }
