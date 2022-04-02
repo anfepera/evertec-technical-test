@@ -17,6 +17,7 @@
             <td> {{  $product->price }}</td>
             <td>
                 <a href="{{ route('order.new', [ $product->id ])}}" class="btn btn-success">Buy</a>
+                <a href="{{ route('order.filter', [ "field"=> "product_id", "filter" => $product->id])}}" class="btn btn-outline-primary">View Product Orders</a>
             </td>
         </tr>
         @endforeach

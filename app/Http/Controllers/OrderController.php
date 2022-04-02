@@ -111,5 +111,12 @@ class OrderController extends Controller
 
     }
 
+    public function filterOrderBy(String $field, String $filter)
+    {
+        $orders = Order::where($field, $filter)->orderBy('updated_at')->get();
+        return view('order.index', [ "orders" => $orders]);
+
+    }
+
 
 }
