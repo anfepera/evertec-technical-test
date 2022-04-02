@@ -8,43 +8,43 @@
             <input type="hidden" id="product_price" name="product_price" value="{{ $order->product->price }}">
             <div class="row">
                 <div class="col">
-                    <label>Id:</label>
+                    <label style="font-weight: bold">Id:</label>
                     <spam >{{ $order->id }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Product name:</label>
+                    <label style="font-weight: bold">Product name:</label>
                     <spam >{{ $order->product->product_name }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Product price:</label>
+                    <label style="font-weight: bold">Product price:</label>
                     <spam >{{ $order->product->price }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Customer name:</label>
+                    <label style="font-weight: bold">Customer name:</label>
                     <spam >{{ $order->customer_name }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Email:</label>
+                    <label style="font-weight: bold">Email:</label>
                     <spam >{{ $order->customer_email }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Phone number:</label>
+                    <label style="font-weight: bold">Phone number:</label>
                     <spam >{{ $order->customer_mobile }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Status:</label>
+                    <label style="font-weight: bold">Status:</label>
                     <spam >{{ $order->status }}</spam>
                 </div>
             </div>
