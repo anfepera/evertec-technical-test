@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Product;
 use App\Services\PlaceToPayApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,35 +11,12 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
     public function index() {
-        $orders = DB::table('orders')->get();
-        if (count($orders) > 0) {
-            $product = DB::table('products')->where('id', ($orders[0])->product_id)->first();
-        }
-        foreach ($orders as $order) {
-            $order->product_name = $product->product_name;
-            $order->price = number_format($product->price, 2);
-        }
+        $orders = Order::all();
         return view('order.index', [ "orders" => $orders]);
     }
 
-    public function new() {
-        $products = DB::table('products')->get();
-        if (count($products) > 0) {
-            $product = $products[0];
-        } else {
-            $product = new \App\Models\Product([
-                "product_name"=>"computer",
-                "price"=> 4000000
-            ]);
-            $product->save();
-        }
-        $product_to_shop = [
-
-            "product_id" => $product->id,
-            "product_name" => $product->product_name,
-            "product_price"=> $product->price
-        ];
-        return view('order.new', $product_to_shop);
+    public function new(Product $product) {
+        return view('order.new', ["product" => $product]);
     }
     public function create(Request $request) {
         $data = $request->all();
@@ -66,14 +44,32 @@ class OrderController extends Controller
     public function detail($reference) {
         $order = DB::table('orders')->where('reference', $reference)->first();
         $placeToPayAPI = new PlaceToPayApi();
-        $statusTransaction = $placeToPayAPI->getTransactionStatus($order->transaction_id);
-        if ($statusTransaction != "") {
-            DB::table('orders')
-                ->where('id', $order->id)
-                ->update(['status' => $statusTransaction]);
+        $responseStatusTransaction = $placeToPayAPI->getTransactionStatus($order->transaction_id);
+        $statusTransaction = $responseStatusTransaction->status()->status();
+        $newStatus = "";
+        if ($statusTransaction == "APPROVED") {
+            $newStatus = "PAYED";
+        } elseif ($statusTransaction == "PENDING") {
+            $newStatus = "PENDING";
+
+        } elseif ($statusTransaction == "REJECTED") {
+            $newStatus = "REJECTED";
 
         }
-        return $order;
+        DB::table('orders')
+            ->where('id', $order->id)
+            ->update(['status' => $newStatus]);
+        return view('order.detail', [
+            "id" =>$order->id,
+            "product_id" => $order->product_id,
+            "product_name" => "-",
+            "product_price"=> "-",
+            "customer_name" => $order->customer_name,
+            "customer_email" => $order->customer_email,
+            "customer_mobile" => $order->customer_mobile,
+            "status" => $newStatus,
+            "reference" => $order->reference
+        ]);
     }
 
     public function pay(Request $request) {
