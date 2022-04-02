@@ -12,6 +12,7 @@
                 <th>Product name</th>
                 <th>Price</th>
                 <th>Status order</th>
+                <th>Action</th>
 
             </tr>
         </thead>
@@ -21,9 +22,14 @@
             <td> {{  $order->customer_name }}</td>
             <td> {{  $order->customer_email }}</td>
             <td> {{  $order->customer_mobile }}</td>
-            <td> {{  $order->product_name }}</td>
-            <td> {{  $order->price }}</td>
+            <td> {{  $order->product->product_name }}</td>
+            <td> {{  $order->product->price }}</td>
             <td> {{  $order->status }}</td>
+            <td>
+                <a href="{{ route('order.detail', [ $order->reference ])}}" class="btn btn-info">View order</a>
+
+
+            </td>
         </tr>
         @endforeach
         </tbody>
