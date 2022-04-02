@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
     ],
+    'DB' => Illuminate\Support\Facades\DB::class,
 
     /*
     |--------------------------------------------------------------------------
