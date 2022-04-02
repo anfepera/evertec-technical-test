@@ -1,8 +1,7 @@
 
-/*
-let selectFilter = document.getElementById('type_filter');
-selectFilter.addEventListener('change', (event) => {
-    alert(`You like ${event.target.value}`);
+$( document ).ready(function() {
+    $('#type_filter').change(function() {
+        alert($(this).val());
+    });
 });
 
- */
