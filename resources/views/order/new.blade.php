@@ -28,7 +28,7 @@
                            name="product_price"
                            type="text"
                            disabled
-                           value="{{ $product->price }}">
+                           value="{{"$ " . number_format($product->price, 0, ",", ".")  }}">
                 </div>
             </div>
             <div class="row">

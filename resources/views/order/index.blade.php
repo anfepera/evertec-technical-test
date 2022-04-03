@@ -1,6 +1,7 @@
 @extends('layout.layout')
 @section('content')
-    <div class="container" style="margin-left: 35%">
+
+    <div class="container container-description-filter">
         <div class="row">
             <div class="col">
                 <div class="card bg-light mb-3" style="max-width: 18rem;">
@@ -9,12 +10,8 @@
                         <p class="card-text"> {{ $filters }}</p>
                     </div>
                 </div>
-
             </div>
-
-
         </div>
-
     </div>
     <h1> Order List</h1>
     <table class="table">
@@ -37,7 +34,7 @@
             <td> {{  $order->customer_email }}</td>
             <td> {{  $order->customer_mobile }}</td>
             <td> {{  $order->product->product_name }}</td>
-            <td> {{  $order->product->price }}</td>
+            <td>{{"$ " . number_format($order->product->price, 0, ",", ".")  }}</td>
             <td> {{  $order->status }}</td>
             <td>
                 <a href="{{ route('order.detail', [ $order->reference ])}}" class="btn btn-info">View order</a>

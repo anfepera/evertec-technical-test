@@ -21,7 +21,7 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <button type="submit" style="margin-top: 6px" class="btn btn-success"  value="Submit">Get orders</button>
+                                <button type="submit"  class="btn btn-success filter-button"  value="Submit">Get orders</button>
                             </div>
                         </div>
 
@@ -43,7 +43,7 @@
         @foreach ($products as $product)
         <tr>
             <td> {{  $product->product_name }}</td>
-            <td> {{  $product->price }}</td>
+            <td>{{"$ " . number_format($product->price, 0, ",", ".")  }}</td>
             <td>
                 <a href="{{ route('order.new', [ $product->id ])}}" class="btn btn-success">Buy</a>
             </td>
