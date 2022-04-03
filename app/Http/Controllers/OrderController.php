@@ -33,6 +33,9 @@ class OrderController extends Controller
          * Get order status, valid payment status in placetopay api and render order detail.
          */
         $order = Order::query()->firstWhere('reference', $reference);
+        if (!$order) {
+            return "Order with reference ".$reference." not found.";
+        }
         $placeToPayAPI = new PlaceToPayApi();
         $responseStatusTransaction = $placeToPayAPI->getTransactionStatus($order->transaction_id);
         $statusTransaction = $responseStatusTransaction->status()->status();
