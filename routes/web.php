@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/',function () {
+    return redirect('/products');
 });
 Route::get('/products', [\App\Http\Controllers\ProductController::class, "index"])->name('products.index');
 Route::get('/orders', [\App\Http\Controllers\OrderController::class, "index"])->name('orders.index');
@@ -23,3 +23,5 @@ Route::post('/order/create', [\App\Http\Controllers\OrderController::class, "cre
 Route::get('/order/detail/{reference}', [\App\Http\Controllers\OrderController::class, "detail"])->name('order.detail');
 Route::post('/order/pay', [\App\Http\Controllers\OrderController::class, "pay"])->name('order.pay');
 Route::get('/order/retry/{order}', [\App\Http\Controllers\OrderController::class, "retry"])->name('order.retry');
+
+Route::post('/order/filterOrderBy', [\App\Http\Controllers\OrderController::class, "filterOrderBy"])->name('order.filter');

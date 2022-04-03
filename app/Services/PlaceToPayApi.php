@@ -8,6 +8,9 @@ class PlaceToPayApi
 {
     public  function __construct()
     {
+        /**
+         * create placetopay client, read parameter from .env file
+         */
         $this->placetopay = new PlacetoPay([
             'login' => config('services.placetopay.login'),
             'tranKey' => config('services.placetopay.tranKey'),
@@ -54,7 +57,6 @@ class PlaceToPayApi
             $data_response['transaction_id'] = $response->requestId();
 
         } else {
-            // There was some error so check the message and log it
             $data_response['error'] = true;
             $data_response['message'] = $response->status()->message();
         }
@@ -64,20 +66,9 @@ class PlaceToPayApi
 
 
     public function getTransactionStatus(String $transactionId) {
-        $response = $this->placetopay->query($transactionId);
-
-        if ($response->isSuccessful()) {
-            // In order to use the functions please refer to the Dnetix\Redirection\Message\RedirectInformation class
-
-            if ($response->status()->isApproved()) {
-                $status = "PAYED";
-                // The payment has been approved
-            } else {
-                $status = "REJECTED";
-
-            }
-        }
-        return $response;
-
+        /**
+         * get status of placetopay
+         */
+        return  $this->placetopay->query($transactionId);
     }
 }
