@@ -17,7 +17,7 @@ Installation
 ============
 ```
 :~$ git clone https://gitlab.com/anfepera/evertec-technical-test.git
-:~$ cd evertec-technical-test}
+:~$ cd evertec-technical-test
 :~$ cp .env.example .env // change configuration
 :~$ composer install
 :~$ php artisan migrate
