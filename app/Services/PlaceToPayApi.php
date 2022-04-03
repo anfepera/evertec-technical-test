@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Services;
+use App\Services\Interfaces\PaymentMethodTemplate;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Request;
 
-class PlaceToPayApi
+class PlaceToPayApi implements PaymentMethodTemplate
 {
     public  function __construct()
     {
@@ -29,7 +30,7 @@ class PlaceToPayApi
          * Provide information for make to pay and return url of payment
          * https://github.com/dnetix/redirection
          */
-        $data_response = [];
+        $dataResponse = [];
 
         $request = [
             'buyer' => [
@@ -52,15 +53,15 @@ class PlaceToPayApi
         ];
         $response = $this->placetopay->request($request);
         if ($response->isSuccessful()) {
-            $data_response['error'] = false;
-            $data_response['payment_url'] = $response->processUrl();
-            $data_response['transaction_id'] = $response->requestId();
+            $dataResponse['error'] = false;
+            $dataResponse['payment_url'] = $response->processUrl();
+            $dataResponse['transaction_id'] = $response->requestId();
 
         } else {
-            $data_response['error'] = true;
-            $data_response['message'] = $response->status()->message();
+            $dataResponse['error'] = true;
+            $dataResponse['message'] = $response->status()->message();
         }
-        return $data_response;
+        return $dataResponse;
 
     }
 
