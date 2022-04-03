@@ -5,7 +5,7 @@
 the implementation of the project consists of providing a purchase method for a store,
 using the placetopay payment gateway.
 
-This project was developed with Php 8.1.4 , Laravel Framework 9.0 and mariaDB 10.6.
+This project was developed with Php 8.1.4 , Laravel Framework 9.5.1 and mariaDB 10.6.
 
 Configuration
 =============
