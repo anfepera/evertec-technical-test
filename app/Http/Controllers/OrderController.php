@@ -4,12 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\Interfaces\PaymentMethodTemplate;
 use App\Services\PlaceToPayApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    /**
+     * @var PaymentMethodTemplate
+     */
+    protected  $paymentMethod;
+
+    public function __construct(PlaceToPayApi $placeToPayMethod)
+    {
+        $this->paymentMethod = $placeToPayMethod;
+    }
+
     public function index()
     {
         /**
@@ -36,8 +47,7 @@ class OrderController extends Controller
         if (!$order) {
             return "Order with reference ".$reference." not found.";
         }
-        $placeToPayAPI = new PlaceToPayApi();
-        $responseStatusTransaction = $placeToPayAPI->getTransactionStatus($order->transaction_id);
+        $responseStatusTransaction = $this->paymentMethod->getTransactionStatus($order->transaction_id);
         $statusTransaction = $responseStatusTransaction->status()->status();
         $newStatus = "";
         if ($statusTransaction == "APPROVED") {
@@ -61,10 +71,9 @@ class OrderController extends Controller
          * create the order register and redirect to payment request url.
          */
         $referenceOrder  = uniqid("ref-");
-        $placeToPayAPI = new PlaceToPayApi();
         $data = $request->all();
         $data['reference'] = $referenceOrder;
-        $response = $placeToPayAPI->createPaymentRequest($data);
+        $response = $this->paymentMethod->createPaymentRequest($data);
         if (isset($response['transaction_id'])) {
             $order = new Order([
                     "reference" => $referenceOrder,
@@ -90,7 +99,6 @@ class OrderController extends Controller
          */
         $orderUpdated = Order::find($order->id);
         $referenceOrderNew = uniqid("ref-");
-        $placeToPayAPI = new PlaceToPayApi();
         $data=[
             "customer_name" => $order->customer_name,
             "customer_email" => $order->customer_email,
@@ -98,7 +106,7 @@ class OrderController extends Controller
             "reference" => $referenceOrderNew,
             "product_price" => $order->product->price
         ];
-        $response = $placeToPayAPI->createPaymentRequest($data);
+        $response = $this->paymentMethod->createPaymentRequest($data);
         if (isset($response['transaction_id'])) {
             $orderUpdated->reference = $referenceOrderNew;
             $orderUpdated->transaction_id = $response['transaction_id'];

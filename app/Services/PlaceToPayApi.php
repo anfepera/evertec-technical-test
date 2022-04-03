@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Services;
+use App\Services\Interfaces\PaymentMethodTemplate;
 use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Request;
 
-class PlaceToPayApi
+class PlaceToPayApi implements PaymentMethodTemplate
 {
     public  function __construct()
     {
