@@ -54,6 +54,8 @@
                             <button type="submit" class="btn btn-success"  value="Submit">Pay</button>
                     @elseif ($order->status == "REJECTED")
                             <a href="{{ route('order.retry',$order->id)}}" class="btn btn-warning">Try again</a>
+                    @elseif ($order->status == "PENDING")
+                        <a href="{{ $order->payment_url }}" class="btn btn-warning">Valid Status Pay</a>
                     @endif
                     <a href="{{ route('products.index')}}" class="btn btn-info">View products list</a>
                     <a href="{{ route('orders.index')}}" class="btn btn-info">View orders list</a>

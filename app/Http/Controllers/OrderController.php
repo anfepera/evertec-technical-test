@@ -10,30 +10,28 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function index() {
+    public function index()
+    {
+        /**
+         * get all order
+         */
         $orders = Order::all();
         return view('order.index', [ "orders" => $orders, "filters" => "All orders"]);
     }
 
-    public function new(Product $product) {
+    public function new(Product $product)
+    {
+        /**
+         * Create order register with product data (from Pay button in Product list )
+         */
         return view('order.new', ["product" => $product]);
-    }
-    public function create(Request $request) {
-        $data = $request->all();
-        $order = new Order([
-            "product_id" => $data['product_id'],
-            "customer_name" => $data['customer_name'],
-            "customer_email" => $data['email'],
-            "customer_mobile" => $data['phone_number'],
-            "status" => "CREATED"
-            ]
-        );
-        $order->save();
-        return view('order.detail', ["order"=>$order]);
     }
 
     public function detail(String $reference)
     {
+        /**
+         * Get order status, valid payment status in placetopay api and render order detail.
+         */
         $order = Order::query()->firstWhere('reference', $reference);
         $placeToPayAPI = new PlaceToPayApi();
         $responseStatusTransaction = $placeToPayAPI->getTransactionStatus($order->transaction_id);
@@ -43,7 +41,6 @@ class OrderController extends Controller
             $newStatus = "PAYED";
         } elseif ($statusTransaction == "PENDING") {
             $newStatus = "PENDING";
-
         } elseif ($statusTransaction == "REJECTED") {
             $newStatus = "REJECTED";
         }
@@ -54,7 +51,12 @@ class OrderController extends Controller
         ]);
     }
 
-    public function pay(Request $request) {
+    public function pay(Request $request)
+    {
+        /**
+         * Get data of order and try to generate url payment and transaction id, after
+         * create the order register and redirect to payment request url.
+         */
         $referenceOrder  = uniqid("ref-");
         $placeToPayAPI = new PlaceToPayApi();
         $data = $request->all();
@@ -74,20 +76,15 @@ class OrderController extends Controller
             );
             $order->save();
             return redirect()->away($response['payment_url']);
-
-
-        } else {
-            return $response;
         }
-        return $response;
-
-
-
-        return "ok";
+        return "Error to pay order";
     }
 
     public function retry(Order $order)
     {
+        /**
+         * When order is REJECTED, create a new request to placetoplay and try pay again
+         */
         $orderUpdated = Order::find($order->id);
         $referenceOrderNew = uniqid("ref-");
         $placeToPayAPI = new PlaceToPayApi();
@@ -106,17 +103,16 @@ class OrderController extends Controller
             $orderUpdated->save();
             return redirect()->away($orderUpdated->payment_url);
         }
-
-        return $order;
-
+        return "Fail to retry pay order";
     }
 
     public function filterOrderBy(Request $request)
     {
+        /**
+         * get order list by customer email
+         */
         $data = $request->all();
         $orders = Order::where("customer_email", "LIKE", "%".$data['filter_email']."%")->orderBy('updated_at')->get();
-
         return view('order.index', [ "orders" => $orders, "filters" => "Customer email contains ".$data['filter_email']]);
     }
-
 }
