@@ -1,7 +1,21 @@
 @extends('layout.layout')
 @section('content')
-    <a href="{{ route('products.index')}}" class="btn btn-info">View products list</a>
+    <div class="container" style="margin-left: 35%">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-light mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Filters apply</div>
+                    <div class="card-body">
+                        <p class="card-text"> {{ $filters }}</p>
+                    </div>
+                </div>
 
+            </div>
+
+
+        </div>
+
+    </div>
     <h1> Order List</h1>
     <table class="table">
         <thead class="table-dark">
@@ -32,4 +46,5 @@
         @endforeach
         </tbody>
     </table>
+    <a href="{{ route('products.index')}}" class="btn btn-info">View products list</a>
 @endsection

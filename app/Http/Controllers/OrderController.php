@@ -12,7 +12,7 @@ class OrderController extends Controller
 {
     public function index() {
         $orders = Order::all();
-        return view('order.index', [ "orders" => $orders]);
+        return view('order.index', [ "orders" => $orders, "filters" => "All orders"]);
     }
 
     public function new(Product $product) {
@@ -115,7 +115,8 @@ class OrderController extends Controller
     {
         $data = $request->all();
         $orders = Order::where("customer_email", "LIKE", "%".$data['filter_email']."%")->orderBy('updated_at')->get();
-        return view('order.index', [ "orders" => $orders]);
+
+        return view('order.index', [ "orders" => $orders, "filters" => "Customer email contains ".$data['filter_email']]);
     }
 
 }
