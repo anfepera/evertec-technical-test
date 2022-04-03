@@ -1,0 +1,13 @@
+@import "./filters.css";
+.filter-button {
+    margin-top: 6px;
+}
+
+.label-form {
+    font-weight: bold;
+}
+
+.container-description-filter{
+    margin-left: 35% !important;
+
+}
