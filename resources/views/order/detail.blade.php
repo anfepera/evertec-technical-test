@@ -8,43 +8,43 @@
             <input type="hidden" id="product_price" name="product_price" value="{{ $order->product->price }}">
             <div class="row">
                 <div class="col">
-                    <label>Id:</label>
+                    <label style="font-weight: bold">Id:</label>
                     <spam >{{ $order->id }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Product name:</label>
+                    <label class="label-form">Product name:</label>
                     <spam >{{ $order->product->product_name }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Product price:</label>
-                    <spam >{{ $order->product->price }}</spam>
+                    <label class="label-form">Product price:</label>
+                    <spam >{{"$ " . number_format($order->product->price, 0, ",", ".")  }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Customer name:</label>
+                    <label class="label-form">Customer name:</label>
                     <spam >{{ $order->customer_name }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Email:</label>
+                    <label class="label-form">Email:</label>
                     <spam >{{ $order->customer_email }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Phone number:</label>
+                    <label class="label-form">Phone number:</label>
                     <spam >{{ $order->customer_mobile }}</spam>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <label>Status:</label>
+                    <label class="label-form">Status:</label>
                     <spam >{{ $order->status }}</spam>
                 </div>
             </div>
@@ -54,6 +54,8 @@
                             <button type="submit" class="btn btn-success"  value="Submit">Pay</button>
                     @elseif ($order->status == "REJECTED")
                             <a href="{{ route('order.retry',$order->id)}}" class="btn btn-warning">Try again</a>
+                    @elseif ($order->status == "PENDING")
+                        <a href="{{ $order->payment_url }}" class="btn btn-warning">Valid Status Pay</a>
                     @endif
                     <a href="{{ route('products.index')}}" class="btn btn-info">View products list</a>
                     <a href="{{ route('orders.index')}}" class="btn btn-info">View orders list</a>
