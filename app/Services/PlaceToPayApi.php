@@ -1,37 +1,23 @@
 <?php
 
 namespace App\Services;
+
+use App\Exceptions\PaymentException;
 use App\Services\Interfaces\PaymentMethodTemplate;
-use Dnetix\Redirection\PlacetoPay;
 use Illuminate\Support\Facades\Request;
 
 class PlaceToPayApi implements PaymentMethodTemplate
 {
-    public  function __construct()
+    private PlaceToPayClient $client;
+
+    public  function __construct(PlaceToPayClient $client)
     {
-        /**
-         * create placetopay client, read parameter from .env file
-         */
-        $this->placetopay = new PlacetoPay([
-            'login' => config('services.placetopay.login'),
-            'tranKey' => config('services.placetopay.tranKey'),
-            'baseUrl' => config('services.placetopay.url'),
-            'timeout' => 10,
-        ]);
+        $this->client = $client;
     }
 
-    /**
-     * @param $data
-     * @return array
-     */
-    public function  createPaymentRequest(array $data):array
+    public function createPaymentRequest(array $data): array
     {
-        /**
-         * Provide information for make to pay and return url of payment
-         * https://github.com/dnetix/redirection
-         */
         $dataResponse = [];
-
         $request = [
             'buyer' => [
                 'name' => $data['customer_name'],
@@ -51,25 +37,26 @@ class PlaceToPayApi implements PaymentMethodTemplate
             'ipAddress' => Request::ip(),
             'userAgent' => Request::userAgent()
         ];
-        $response = $this->placetopay->request($request);
+
+        $response = $this->client->request($request);
         if ($response->isSuccessful()) {
             $dataResponse['error'] = false;
             $dataResponse['payment_url'] = $response->processUrl();
             $dataResponse['transaction_id'] = $response->requestId();
-
         } else {
             $dataResponse['error'] = true;
             $dataResponse['message'] = $response->status()->message();
         }
         return $dataResponse;
-
     }
 
-
-    public function getTransactionStatus(String $transactionId) {
-        /**
-         * get status of placetopay
-         */
-        return  $this->placetopay->query($transactionId);
+    public function getTransactionStatus(String $transactionId): array
+    {
+        $response = $this->client->query($transactionId);
+        return [
+            'error' => !$response->isSuccessful(),
+            'status' => $response->status()->status(),
+            'transaction' => $response->payment(),
+        ];
     }
 }

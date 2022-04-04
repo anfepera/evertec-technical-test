@@ -8,10 +8,8 @@ class ProductController extends Controller
 {
     public function index()
     {
-        /**
-         * get all products records
-         */
         $products = Product::all();
+
         return view('product.index', [ "products" => $products]);
     }
 }
