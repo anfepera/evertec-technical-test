@@ -16,7 +16,7 @@ should be assign. Please copy .env.example file to .env file and change values o
 Installation
 ============
 ```
-:~$ git clone https://gitlab.com/anfepera/evertec-technical-test.git
+:~$ git clone https://github.com/anfepera/evertec-technical-test.git
 :~$ cd evertec-technical-test
 :~$ cp .env.example .env // change configuration
 :~$ composer install
