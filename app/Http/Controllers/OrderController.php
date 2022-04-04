@@ -4,126 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
-use App\Services\Interfaces\PaymentMethodTemplate;
-use App\Services\PlaceToPayApi;
+use App\Repositories\PaymentRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
-    /**
-     * @var PaymentMethodTemplate
-     */
-    protected  $paymentMethod;
-
-    public function __construct(PlaceToPayApi $placeToPayMethod)
-    {
-        $this->paymentMethod = $placeToPayMethod;
-    }
-
     public function index()
     {
-        /**
-         * get all order
-         */
         $orders = Order::all();
         return view('order.index', [ "orders" => $orders, "filters" => "All orders"]);
     }
 
     public function new(Product $product)
     {
-        /**
-         * Create order register with product data (from Pay button in Product list )
-         */
         return view('order.new', ["product" => $product]);
     }
 
-    public function detail(String $reference)
+    public function detail(PaymentRepository $repository, String $reference)
     {
-        /**
-         * Get order status, valid payment status in placetopay api and render order detail.
-         */
+        /** @var Order $order */
         $order = Order::query()->firstWhere('reference', $reference);
         if (!$order) {
-            return "Order with reference ".$reference." not found.";
+            Log::error('Order '.$reference." not found");
+            return abort(404);
         }
-        $responseStatusTransaction = $this->paymentMethod->getTransactionStatus($order->transaction_id);
-        $statusTransaction = $responseStatusTransaction->status()->status();
-        $newStatus = "";
-        if ($statusTransaction == "APPROVED") {
-            $newStatus = "PAYED";
-        } elseif ($statusTransaction == "PENDING") {
-            $newStatus = "PENDING";
-        } elseif ($statusTransaction == "REJECTED") {
-            $newStatus = "REJECTED";
-        }
-        $order->status = $newStatus;
-        $order->save();
+        $repository->resolve($order);
         return view('order.detail', [
             "order" => $order
         ]);
     }
 
-    public function pay(Request $request)
+    public function pay(PaymentRepository $repository, Request $request)
     {
-        /**
-         * Get data of order and try to generate url payment and transaction id, after
-         * create the order register and redirect to payment request url.
-         */
-        $referenceOrder  = uniqid("ref-");
-        $data = $request->all();
-        $data['reference'] = $referenceOrder;
-        $response = $this->paymentMethod->createPaymentRequest($data);
-        if (isset($response['transaction_id'])) {
-            $order = new Order([
-                    "reference" => $referenceOrder,
-                    "product_id" => $data['product_id'],
-                    "customer_name" => $data['customer_name'],
-                    "customer_email" => $data['customer_email'],
-                    "customer_mobile" => $data['customer_mobile'],
-                    "status" => "CREATED",
-                    "transaction_id" => $response['transaction_id'],
-                    "payment_url" =>  $response['payment_url']
-                ]
-            );
-            $order->save();
-            return redirect()->away($response['payment_url']);
-        }
-        return "Error to pay order";
+        $paymentUrl = $repository->create($request->all());
+        return redirect($paymentUrl);
     }
 
-    public function retry(Order $order)
+    public function retry(PaymentRepository $repository, Order $order)
     {
-        /**
-         * When order is REJECTED, create a new request to placetoplay and try pay again
-         */
-        $orderUpdated = Order::find($order->id);
-        $referenceOrderNew = uniqid("ref-");
-        $data=[
-            "customer_name" => $order->customer_name,
-            "customer_email" => $order->customer_email,
-            "customer_mobile" => $order->customer_mobile,
-            "reference" => $referenceOrderNew,
-            "product_price" => $order->product->price
-        ];
-        $response = $this->paymentMethod->createPaymentRequest($data);
-        if (isset($response['transaction_id'])) {
-            $orderUpdated->reference = $referenceOrderNew;
-            $orderUpdated->transaction_id = $response['transaction_id'];
-            $orderUpdated->payment_url = $response['payment_url'];
-            $orderUpdated->save();
-            return redirect()->away($orderUpdated->payment_url);
-        }
-        return "Fail to retry pay order";
+        $paymentUrl = $repository->retry($order);
+        return redirect($paymentUrl);
     }
 
     public function filterOrderBy(Request $request)
     {
-        /**
-         * get order list by customer email
-         */
-        $data = $request->all();
-        $orders = Order::where("customer_email", "LIKE", "%".$data['filter_email']."%")->orderBy('updated_at')->get();
-        return view('order.index', [ "orders" => $orders, "filters" => "Customer email contains ".$data['filter_email']]);
+        $customerEmail = $request->input('filter_email', '');
+        $orders = Order::filterByCustomerEmail($customerEmail)->get();
+        return view('order.index', [
+            "orders" => $orders,
+            "filters" => "Customer email contains ".$customerEmail
+        ]);
     }
 }

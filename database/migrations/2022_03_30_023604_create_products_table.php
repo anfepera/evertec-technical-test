@@ -19,11 +19,6 @@ return new class extends Migration
             $table->double("price");
             $table->timestamps();
         });
-        $computer_product = new \App\Models\Product([
-            "product_name"=>"computer",
-            "price"=> 4000000
-        ]);
-        $computer_product->save();
     }
 
     /**
