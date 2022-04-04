@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\PaymentRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -25,6 +26,7 @@ class OrderController extends Controller
         /** @var Order $order */
         $order = Order::query()->firstWhere('reference', $reference);
         if (!$order) {
+            Log::error('Order '.$reference." not found");
             return abort(404);
         }
         $repository->resolve($order);
@@ -48,9 +50,7 @@ class OrderController extends Controller
     public function filterOrderBy(Request $request)
     {
         $customerEmail = $request->input('filter_email', '');
-
         $orders = Order::filterByCustomerEmail($customerEmail)->get();
-
         return view('order.index', [
             "orders" => $orders,
             "filters" => "Customer email contains ".$customerEmail

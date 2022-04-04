@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Exceptions\PaymentException;
 use App\Models\Order;
 use App\Services\Interfaces\PaymentMethodTemplate;
+use Illuminate\Support\Facades\Log;
 
 class PaymentRepository
 {
@@ -42,10 +43,12 @@ class PaymentRepository
     public function resolve(Order $order): void
     {
         if (!$order->requireUpdateStatus()) {
+            Log::info('Status is different to CREATED or PENDING', $order->toArray());
             return;
         }
         $response = $this->paymentMethod->getTransactionStatus($order->transaction_id);
         if ($response['error'] === true) {
+            Log::info('Error in get transaction status of request payment method', $response);
             return;
         }
         $statusTransaction = $response['status'];
@@ -56,6 +59,7 @@ class PaymentRepository
     public function retry(Order $order): string
     {
         if (!$order->isRejected()) {
+            Log::error('Order cannot retry because status is diffent to  REJECTED', $order->toArray());
             throw  new PaymentException("Can't retry pay order");
         }
         $data = [
@@ -79,6 +83,7 @@ class PaymentRepository
     {
         $response = $this->paymentMethod->createPaymentRequest($data);
         if ($response['error'] === true) {
+            Log::error('Error to pay order', $data);
             throw new PaymentException('Error to pay order');
         }
         return $response;
