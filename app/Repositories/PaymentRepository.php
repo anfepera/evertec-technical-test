@@ -42,10 +42,6 @@ class PaymentRepository
 
     public function resolve(Order $order): void
     {
-        if (!$order->requireUpdateStatus()) {
-            Log::info('Status is different to CREATED or PENDING', $order->toArray());
-            return;
-        }
         $response = $this->paymentMethod->getTransactionStatus($order->transaction_id);
         if ($response['error'] === true) {
             Log::info('Error in get transaction status of request payment method', $response);
@@ -71,7 +67,6 @@ class PaymentRepository
         ];
 
         $response = $this->sendPaymentRequest($data);
-
         $order->transaction_id = $response['transaction_id'];
         $order->payment_url = $response['payment_url'];
         $order->save();
