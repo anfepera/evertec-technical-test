@@ -24,6 +24,20 @@ Installation
 :~$ php artisan db:seed
 ```
 
+Testing
+============
+You should be create database test and configure it in .env.testing file.
+```
+:~$ cp .env.example .env.testing
+```
+Change configuration the PLACE_TO_PAY_LOGIN, PLACE_TO_PAY_TRAN_KEY and PLACE_TO_PAY_URL constants
+should be assign (Fake values) in .env.testing file
+
+Run test:
+```
+:~$ ./vendor/bin/phpunit
+```
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
