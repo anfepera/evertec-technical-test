@@ -8,44 +8,44 @@
             <input type="hidden" id="product_price" name="product_price" value="{{ $order->product->price }}">
             <div class="row">
                 <div class="col">
-                    <label style="font-weight: bold">Id:</label>
-                    <spam >{{ $order->id }}</spam>
+                    <label class="label-form">Id:</label>
+                    <span >{{ $order->id }}</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="label-form">Product name:</label>
-                    <spam >{{ $order->product->product_name }}</spam>
+                    <span >{{ $order->product->product_name }}</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="label-form">Product price:</label>
-                    <spam >{{"$ " . number_format($order->product->price, 0, ",", ".")  }}</spam>
+                    <span >{{"$ " . number_format($order->product->price, 0, ",", ".")  }}</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="label-form">Customer name:</label>
-                    <spam >{{ $order->customer_name }}</spam>
+                    <span>{{ $order->customer_name }}</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="label-form">Email:</label>
-                    <spam >{{ $order->customer_email }}</spam>
+                    <span >{{ $order->customer_email }}</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="label-form">Phone number:</label>
-                    <spam >{{ $order->customer_mobile }}</spam>
+                    <span >{{ $order->customer_mobile }}</span>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <label class="label-form">Status:</label>
-                    <spam >{{ $order->status }}</spam>
+                    <span >{{ $order->status }}</span>
                 </div>
             </div>
             <div class="row">
@@ -64,3 +64,4 @@
 
         </div>
     </form>
+@endsection
